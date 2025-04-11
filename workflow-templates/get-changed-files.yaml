@@ -30,11 +30,12 @@ jobs:
           fi"
 
           ADDED_FILES=$(git diff --name-only --diff-filter=A $base $head $file_type_filter| paste -sd "," -)
-          MODIFIED_FILES=$(git diff --name-only --diff-filter=M $base $head  $file_type_filter | paste -sd "," -)
-          RENAMED_FILES=$(git diff --name-status --diff-filter=R $base $head  $file_type_filter | awk '{print $2 ">" $3}' | paste -sd "," -)
+          MODIFIED_FILES=$(git diff --name-only --diff-filter=M $base $head $file_type_filter | paste -sd "," -)
+          RENAMED_FILES=$(git diff --name-status --diff-filter=R $base $head $file_type_filter | awk '{print $2 ">" $3}' | paste -sd "," -)
           
           {
             echo "added_files=$ADDED_FILES"
             echo "modified_files=$MODIFIED_FILES"
             echo "renamed_files=$RENAMED_FILES"
+            echo "all_changed_files+=($ADDED_FILES $MODIFIED_FILES $RENAMED_FILES)"
           } >> "$GITHUB_OUTPUT"
