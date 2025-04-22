@@ -3,7 +3,7 @@ description: ""
 inputs:
   environment:
     required: true
-    description: "Target environment" 
+    description: "Target environment for calling workflow" 
   file-filter:
     required: true
     description: "Filter to limit what files are returned"
@@ -20,6 +20,7 @@ runs:
   using: "composite"
   steps:
     - name: Get diff
+      id: check_files
       shell: bash
       run: |
         base=$([ "${{ inputs.environment }}" == "dev" ] &&  echo "${{ github.event.pull_request.base.sha }}" || echo "${{ github.event.before }}")
@@ -39,3 +40,46 @@ runs:
           echo "all_changed_files=$ALL_CHANGED"
           echo "any_changed=$ANY_CHANGED"
         } >> "$GITHUB_OUTPUT"
+    - name: List all new/modified/deleted/renamed files
+      id: list_files
+      shell: bash
+      run: |
+        IFS=','  
+        echo "NEW:"
+        for new_file in $(echo "${{ steps.check_files.outputs.added_files }}" | tr -d '"'); do
+          if [[ ${#new_file} > 0 ]]; then
+            echo "$new_file was added."
+          else
+            echo "No files added."
+          fi
+        done
+      
+        echo "MODIFIED:"
+        for mod_file in $(echo "${{ steps.check_files.outputs.modified_files }}" | tr -d '"'); do
+          if [[ ${#mod_file} > 0 ]]; then
+            echo "$mod_file was modified."
+          else
+            echo "No files modified."
+          fi
+        done
+
+        echo "RENAMED:"
+        for rename_pair in $(echo "${{ steps.check_files.outputs.renamed_files }}" | tr -d '"'); do
+          if [[ ${#rename_pair} > 0 ]]; then
+            export old_name="$(echo "$rename_pair" | cut -d '>' -f 1)"
+            export new_name="$(echo "$rename_pair" | cut -d '>' -f 2)"
+            echo "$old_name was renamed to $new_name."
+          else
+            echo "No files renamed."
+          fi
+        done
+
+        echo "DELETED:"
+        for del_file in $(echo "${{ steps.check_files.outputs.deleted_files }}" | tr -d '"'); do
+          if [[ ${#del_file} > 0 ]]; then
+            echo "$del_file was deleted."
+          else
+            echo "No files deleted."
+          fi
+        done
+
