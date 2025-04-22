@@ -83,3 +83,6 @@ runs:
           fi
         done
 
+        echo "ALL_CHANGED:"
+        echo "${{ steps.check_files.outputs.all_changed_files"
+
