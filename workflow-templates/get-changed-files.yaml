@@ -24,7 +24,7 @@ jobs:
           head=$([ "${{ inputs.environment }}" == "dev" ] &&  echo "${{ github.event.pull_request.head.sha }}" || echo "${{ github.event.after }}")
 
           if [[ -v "{{ inputs.file-type }}"]]; then
-            file_type_filter=' -- "*.${{ inputs.file-type }}"'
+            file_type_filter=' -- "${{ inputs.file-type }}"'
           else
             file_type_filter=""
           fi"
