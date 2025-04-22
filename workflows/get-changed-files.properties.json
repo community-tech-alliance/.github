@@ -1,8 +1,0 @@
-{
-	"name": "Get Changed Files",
-	"description": "Workflow template for getting chsnged files on a branch.",
-	"iconName": "octicon git-compare",
-	"categories": [
-			"continuous-integration"
-	]
-}
