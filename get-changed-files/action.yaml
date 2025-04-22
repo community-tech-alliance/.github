@@ -29,10 +29,13 @@ runs:
         ADDED_FILES=$(git diff --name-only --diff-filter=A $base $head $file_type_filter| paste -sd "," -)
         MODIFIED_FILES=$(git diff --name-only --diff-filter=M $base $head $file_type_filter | paste -sd "," -)
         RENAMED_FILES=$(git diff --name-status --diff-filter=R $base $head $file_type_filter | awk '{print $2 ">" $3}' | paste -sd "," -)
+        ALL_CHANGED+=($ADDED_FILES $MODIFIED_FILES)
+        ANY_CHANGED=$([ ${#ALL_CHANGED[@]} -eq 0 ] && false || true)
         
         {
           echo "added_files=$ADDED_FILES"
           echo "modified_files=$MODIFIED_FILES"
           echo "renamed_files=$RENAMED_FILES"
-          echo "all_changed_files+=($ADDED_FILES $MODIFIED_FILES $RENAMED_FILES)"
+          echo "all_changed_files=$ALL_CHANGED"
+          echo "any_changed=$ANY_CHANGED"
         } >> "$GITHUB_OUTPUT"
