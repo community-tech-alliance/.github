@@ -89,15 +89,4 @@ runs:
           fi
         done
 
-        echo "DELETED:"
-        for del_file in $(echo "${{ steps.check_files.outputs.deleted_files }}" | tr -d '"'); do
-          if [[ ${#del_file} > 0 ]]; then
-            echo "$del_file was deleted."
-          else
-            echo "No files deleted."
-          fi
-        done
-
-        echo "ALL_CHANGED:"
-        echo "${{ steps.check_files.outputs.all_changed_files }}"
 
