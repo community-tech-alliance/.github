@@ -16,6 +16,8 @@ outputs:
     value: ${{ steps.check_files.outputs.renamed_files}}
   all_changed_files:
     value: ${{ steps.check_files.outputs.all_changed_files}}
+  any_changed:
+    value: ${{ steps.check_files.outputs.any_changed}}
 runs: 
   using: "composite"
   steps:
