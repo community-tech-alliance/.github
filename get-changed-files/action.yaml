@@ -27,11 +27,11 @@ runs:
       id: check_files
       shell: bash
       env: 
-        ENV: ${{ inputs.environment }}
+        TARGET_ENV: ${{ inputs.environment }}
         FILE_FILTER: ${{ inputs.file-filter }}
       run: |
-        base=$([ "$ENV" == "dev" ] &&  echo "${{ github.event.pull_request.base.sha }}" || echo "${{ github.event.before }}")
-        head=$([ "$ENV" == "dev" ] &&  echo "${{ github.event.pull_request.head.sha }}" || echo "${{ github.event.after }}")
+        base=$([ "$TARGET_ENV" == "dev" ] &&  echo "${{ github.event.pull_request.base.sha }}" || echo "${{ github.event.before }}")
+        head=$([ "$TARGET_ENV" == "dev" ] &&  echo "${{ github.event.pull_request.head.sha }}" || echo "${{ github.event.after }}")
         file_type_filter=""
         if [ -n "$FILE_FILTER" ]; then
           file_type_filter="-- \"$FILE_FILTER\""
@@ -47,6 +47,7 @@ runs:
         echo "ADDED: $ADDED_FILES"
         echo "MOD: $MODIFIED_FILES"
         echo "RENAMED: $RENAMED_FILES"
+        echo "ALL_CHANGED: $ALL_CHANGED"
         echo "ANY CHANGED: $ANY_CHANGED"
 
         {
