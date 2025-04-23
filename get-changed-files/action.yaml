@@ -26,15 +26,12 @@ runs:
     - name: Get diff
       id: check_files
       shell: bash
-      env: 
-        TARGET_ENV: ${{ inputs.environment }}
-        FILE_FILTER: ${{ inputs.file-filter }}
       run: |
-        base=$([ "$TARGET_ENV" == "dev" ] &&  echo "${{ github.event.pull_request.base.sha }}" || echo "${{ github.event.before }}")
-        head=$([ "$TARGET_ENV" == "dev" ] &&  echo "${{ github.event.pull_request.head.sha }}" || echo "${{ github.event.after }}")
+        base=$([ "${{ inputs.environment }}" == "dev" ] &&  echo "${{ github.event.pull_request.base.sha }}" || echo "${{ github.event.before }}")
+        head=$([ "${{ inputs.environment }}" == "dev" ] &&  echo "${{ github.event.pull_request.head.sha }}" || echo "${{ github.event.after }}")
         file_type_filter=""
-        if [ -n "$FILE_FILTER" ]; then
-          file_type_filter="-- \"$FILE_FILTER\""
+        if [ -n "${{ inputs.file-filter }}" ]; then
+          file_type_filter="-- \"${{ inputs.file-filter }}\""
         fi
         echo "Running command with: $file_type_filter"
 
@@ -42,7 +39,7 @@ runs:
         MODIFIED_FILES=$(git diff --name-only --diff-filter=M $base $head $file_type_filter | paste -sd "," -)
         RENAMED_FILES=$(git diff --name-status --diff-filter=R $base $head $file_type_filter | awk '{print $2 ">" $3}' | paste -sd "," -)
         mapfile -t ALL_CHANGED < <(git diff --name-only --diff-filter=d $base $head $file_type_filter | paste -sd "," -)
-        ANY_CHANGED=$([ ${#ALL_CHANGED[@]} -eq 0 ] && false || true)
+        ANY_CHANGED=$([ ${#ALL_CHANGED[@]} -eq 0 ] && "false" || "true")
 
         echo "ADDED: $ADDED_FILES"
         echo "MOD: $MODIFIED_FILES"
