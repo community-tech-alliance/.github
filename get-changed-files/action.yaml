@@ -19,6 +19,9 @@ outputs:
 runs: 
   using: "composite"
   steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 2
     - name: Get diff
       id: check_files
       shell: bash
@@ -27,7 +30,7 @@ runs:
         head=$([ "${{ inputs.environment }}" == "dev" ] &&  echo "${{ github.event.pull_request.head.sha }}" || echo "${{ github.event.after }}")
         file_type_filter=$([ -z "${{ inputs.file-filter }}" ] &&   echo "" || echo ' -- "${{ inputs.file-filter }}"')
 
-        ADDED_FILES=$(git diff --name-only --diff-filter=A $base $head $file_type_filter| paste -sd "," -)
+        ADDED_FILES=$(git diff --name-only --diff-filter=A $base $head $file_type_filter | paste -sd "," -)
         MODIFIED_FILES=$(git diff --name-only --diff-filter=M $base $head $file_type_filter | paste -sd "," -)
         RENAMED_FILES=$(git diff --name-status --diff-filter=R $base $head $file_type_filter | awk '{print $2 ">" $3}' | paste -sd "," -)
         ALL_CHANGED+=($ADDED_FILES $MODIFIED_FILES)
