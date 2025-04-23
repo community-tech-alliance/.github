@@ -32,7 +32,11 @@ runs:
         RENAMED_FILES=$(git diff --name-status --diff-filter=R $base $head $file_type_filter | awk '{print $2 ">" $3}' | paste -sd "," -)
         ALL_CHANGED+=($ADDED_FILES $MODIFIED_FILES)
         ANY_CHANGED=$([ ${#ALL_CHANGED[@]} -eq 0 ] && false || true)
-        
+
+        echo "ADDED: $ADDED_FILES"
+        echo "MOD: $MODIFIED_FILES"
+        echo "RENAMED: $RENAMED_FILES"
+
         {
           echo "added_files=$ADDED_FILES"
           echo "modified_files=$MODIFIED_FILES"
@@ -40,6 +44,7 @@ runs:
           echo "all_changed_files=$ALL_CHANGED"
           echo "any_changed=$ANY_CHANGED"
         } >> "$GITHUB_OUTPUT"
+
     - name: List all new/modified/deleted/renamed files
       id: list_files
       shell: bash
