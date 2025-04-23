@@ -38,13 +38,9 @@ runs:
         ADDED_FILES=$(git diff --name-only --diff-filter=A $base $head $file_type_filter | paste -sd "," -)
         MODIFIED_FILES=$(git diff --name-only --diff-filter=M $base $head $file_type_filter | paste -sd "," -)
         RENAMED_FILES=$(git diff --name-status --diff-filter=R $base $head $file_type_filter | awk '{print $2 ">" $3}' | paste -sd "," -)
-        mapfile -t ALL_CHANGED < <(git diff --name-only --diff-filter=d $base $head $file_type_filter | paste -sd "," -)
+        mapfile -t ALL_CHANGED < <(git diff --name-only --diff-filter=d $base $head $file_type_filter)
         ANY_CHANGED=$([ ${#ALL_CHANGED[@]} -eq 0 ] && "false" || "true")
 
-        echo "ADDED: $ADDED_FILES"
-        echo "MOD: $MODIFIED_FILES"
-        echo "RENAMED: $RENAMED_FILES"
-        echo "ALL_CHANGED: $ALL_CHANGED"
         echo "ANY CHANGED: $ANY_CHANGED"
 
         {
