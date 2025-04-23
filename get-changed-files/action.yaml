@@ -43,7 +43,7 @@ runs:
         MODIFIED_FILES=$(git diff --name-only --diff-filter=M "$base" "$head" "${file_type_filter[@]}" | paste -sd "," -)
         RENAMED_FILES=$(git diff --name-status --diff-filter=R "$base" "$head" "${file_type_filter[@]}" | awk '{print $2 ">" $3}' | paste -sd "," -)
         mapfile -t ALL_CHANGED < <(git diff --name-only --diff-filter=d "$base" "$head" "${file_type_filter[@]}")
-        ANY_CHANGED=$([ ${#ALL_CHANGED[@]} -eq 0 ] && "false" || "true")
+        ANY_CHANGED=$([ ${#ALL_CHANGED[@]} -eq 0 ] && echo false || echo true)
 
         echo "ANY CHANGED: $ANY_CHANGED"
 
