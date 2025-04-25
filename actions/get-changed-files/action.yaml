@@ -42,6 +42,7 @@ runs:
         ADDED_FILES=$(git diff --name-only --diff-filter=A "$base" "$head" "${file_type_filter[@]}" | paste -sd "," -)
         MODIFIED_FILES=$(git diff --name-only --diff-filter=M "$base" "$head" "${file_type_filter[@]}" | paste -sd "," -)
         RENAMED_FILES=$(git diff --name-status --diff-filter=R "$base" "$head" "${file_type_filter[@]}" | awk '{print $2 ">" $3}' | paste -sd "," -)
+        DELETED_FILES=$(git diff --name-only --diff-filter=D "$base" "$head" "${file_type_filter[@]}" | paste -sd "," -)
         mapfile -t ALL_CHANGED < <(git diff --name-only --diff-filter=d "$base" "$head" "${file_type_filter[@]}")
         ANY_CHANGED=$([ ${#ALL_CHANGED[@]} -eq 0 ] && echo false || echo true)
 
@@ -51,6 +52,7 @@ runs:
           echo "added_files=$ADDED_FILES"
           echo "modified_files=$MODIFIED_FILES"
           echo "renamed_files=$RENAMED_FILES"
+          echo "deleted_files=$DELETED_FILES"
           echo "all_changed_files=$ALL_CHANGED"
           echo "any_changed=$ANY_CHANGED"
         } >> "$GITHUB_OUTPUT"
@@ -86,6 +88,15 @@ runs:
             echo "$old_name was renamed to $new_name."
           else
             echo "No files renamed."
+          fi
+        done
+
+        echo "DELETED:"
+        for del_file in $(echo "${{ steps.check_files.outputs.deleted_files }}" | tr -d '"'); do
+          if [[ ${#del_file} > 0 ]]; then
+            echo "$del_file was deleted."
+          else
+            echo "No files deleted."
           fi
         done
 
