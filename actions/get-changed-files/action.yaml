@@ -13,6 +13,8 @@ outputs:
     value: ${{ steps.check_files.outputs.modified_files}}
   renamed_files:
     value: ${{ steps.check_files.outputs.renamed_files}}
+  deleted_files:
+    value: ${{ steps.check_files.outputs.deleted_files}}
   all_changed_files:
     value: ${{ steps.check_files.outputs.all_changed_files}}
   any_changed:
