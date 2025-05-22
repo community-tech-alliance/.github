@@ -1,3 +1,10 @@
+---
+> **Notice:**  
+> This repository is maintained by Community Tech Alliance for internal use.  
+> It is public for transparency, but **not officially supported for external use**.  
+> See [LICENSE](./LICENSE) for terms.
+---
+
 # 📘 Using GitHub Composite Actions & Reusable Workflows
 
 GitHub Actions offers two ways to modularize your CI/CD pipelines: **composite actions** and **reusable workflows**. Both help simplify and reuse logic across multiple workflows or repositories.
