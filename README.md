@@ -105,6 +105,6 @@ jobs:
 
 ---
 
-## Notice
+## ⚠️ Notice
 
 This repository is maintained by Community Tech Alliance for internal use. It is public for transparency, but **not officially supported for external use**. See [LICENSE](./LICENSE) for terms.
